@@ -1,0 +1,18 @@
+{
+  "name": "@aviture/cesium-webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "file-loader": "^0.8.4",
+    "exports-loader": "^0.6.2",
+    "imports-loader": "^0.6.4",
+    "script-loader": "^0.6.1",
+    "css-loader": "^0.14.1"
+  }
+}
