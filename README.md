@@ -137,7 +137,7 @@ If you are a webpack expert, you'll probably see a lot of steps in here that are
 
 ## Using the Source
 
-
+Using the source directly can be your best bet when you really only want to pull in the parts of Cesium that you're using, and leave out the stuff you're not.  This can lead to faster loading times and keep your app more light-weight, always a good thing!  Unfortunately things can get slightly more tricky with this route with pre v1.15 Cesium, but we've got some steps mapped out and I'll identify which ones are optional if you're post 1.15
 
 
 

@@ -1,0 +1,18 @@
+{
+  "name": "cesium-webpack-tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "css-loader": "^0.14.1",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.2",
+    "cesium": "AnalyticalGraphicsInc/cesium#1.14"
+
+  }
+}
