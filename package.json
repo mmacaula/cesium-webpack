@@ -1,5 +1,5 @@
 {
-  "name": "@aviture/cesium-webpack",
+  "name": "cesium-webpack-tutorial",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,10 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "css-loader": "^0.14.1",
     "file-loader": "^0.8.4",
-    "exports-loader": "^0.6.2",
-    "imports-loader": "^0.6.4",
-    "script-loader": "^0.6.1",
-    "css-loader": "^0.14.1"
+    "html-webpack-plugin": "^1.6.2",
+    "script-loader": "^0.6.1"
   }
 }
