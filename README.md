@@ -118,7 +118,66 @@ If you are a webpack expert, you'll probably see a lot of steps in here that are
 
 Using the source directly can be your best bet when you really only want to pull in the parts of Cesium that you're using, and leave out the stuff you're not.  This can lead to faster loading times and keep your app more light-weight, always a good thing!  Unfortunately things can get slightly more tricky with this route with pre v1.15 Cesium, but we've got some steps mapped out and I'll identify which ones are optional if you're post 1.15
 
+1.  (pre-v1.15 step).  Delete all package.json files in Cesium's `Source` directory. You can do this on *nix systems with this command:  `find path/to/Cesium/Source -name "package.json" -type f -delete`.  On Windows you should be able to run from the Source directory: `del /s package.json`.  Note this is untested and be careful as you type it.  To be safe, use `del /s /p package.json` which should ask for confirmation for each file.
 
+2.  Build Cesium's source.  Pre v1.15, you'll need to run `ant build`.  This generates all the .js files you'll need.  If you are using post v1.15 Cesium, you'll build using `gulp`.
+
+3.  Create an app.js file and make it look like this:
+    ```
+    require('cesium/Source/Widgets/widgets.css');
+    var BuildModuleUrl = require('cesium/Source/Core/ buildModuleUrl');
+    BuildModuleUrl.se tBaseUrl('./');
+
+     var Viewer = require('cesium/Source/Widgets/Viewer/ Viewer');
+
+    var viewer = new Viewer('cesiumContainer');
+    ```
+
+    This is our 'entry' point again.  It's slightly different than before.  We're still loading in the 'css' file via a `require` call, but instead of doing a `window.CESIUM_BASE_URL` we're loading in the `BuildModuleUrl` module and setting the base url there.
+
+    Next we're `require`ing in the Viewer *from the source* directory.  This is how you'll use Cesium modules from now on.
+
+    Finally we just use the viewer and instantiate it as before!
+
+4.  Next, let's look at our 'webpack.config.js' file.
+    ```
+    var HtmlPlugin = require('html-webpack-plugin');
+
+    module.exports = {
+        entry: "./app.js",
+        output: {
+            path: __dirname + '/public',
+            filename: "bundle.js",
+            sourcePrefix: ''
+        },
+        plugins: [
+            new HtmlPlugin({
+                template: 'index.html',
+                inject : true
+            })
+        ],
+        devServer: {
+            contentBase: './public',
+        },
+        module: {
+            unknownContextCritical: false,
+            loaders: [
+                { test: /\.css$/, loader: "style!css" },
+                {
+                    test: /\.(png|gif|jpg|jpeg)$/,
+                    loader: 'file-loader'
+                }
+            ]
+        }
+    };
+    ```
+    A lot of this is the same as before but with some differences:
+
+    *  In the `output` object we have `sourcePrefix: ''`.  This is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://groups.google.com/forum/#!topic/cesium-dev/i7KAgG-IL5c).
+
+    *  There's also the `unknownContextCritical : false` which tells webpack to ignore some warnings due to the way Cesium dynamically builds module paths.
+
+5.   With all that setup, you should be able to run `webpack-dev-server` on your console and navigate to localhost:8080 to and see your Cesium viewer up and running.
 
 
 ## I've already got Webpack setup, just tell me how to use Cesium
@@ -140,29 +199,33 @@ Pre-v1.15 you'll need a couple more steps, which you can integrate into your bui
 2.  Build Cesium's source.  Pre v1.15, you'll need to run `ant build`.  This generates all the .js files you'll need.  If you are using post v1.15 Cesium, you'll build using `gulp`.
 
 3.  Your webpack config will at a minimum need these options configured.  **Note, you'll need more, but these options are the minimum to get Cesium working from source**:
-```
-{
-    output: {
-        sourcePrefix: ''
-    },
-    module: {
-        unknownContextCritical: false,
-        loaders: [
-            { test: /\.css$/, loader: "style!css" },
-            {
-                test: /\.(png|gif|jpg|jpeg)$/,
-                loader: 'file-loader'
-            }
-        ]
+    ```
+    {
+        output: {
+            sourcePrefix: ''
+        },
+        module: {
+            unknownContextCritical: false,
+            loaders: [
+                { test: /\.css$/, loader: "style!css" },
+                {
+                    test: /\.(png|gif|jpg|jpeg)$/,
+                    loader: 'file-loader'
+                }
+            ]
+        }
     }
-}
-```
+    ```
 
-*  The `sourcePrefix`: '' is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://groups.google.com/forum/#!topic/cesium-dev/i7KAgG-IL5c).
+    *  The `sourcePrefix`: '' is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://groups.google.com/forum/#!topic/cesium-dev/i7KAgG-IL5c).
 
-*  The `unknownContextCritical: false` is not strictly required, but Cesium (and the version of knockout included) uses dynamic module loading with require.js and this confuses webpack.  These warnings are safe to ignore and this flag ignores them.  Be careful though as this ignores all of those warnings.
+    *  The `unknownContextCritical: false` is not strictly required, but Cesium (and the version of knockout included) uses dynamic module loading with require.js and this confuses webpack.  These warnings are safe to ignore and this flag ignores them.  Be careful though as this ignores all of those warnings.
 
-*  The loaders are probably already included in your webpack config but they are necessary to `require` the 'widgets.css' file and all the images they end up loading.
+    *  The loaders are probably already included in your webpack config but they are necessary to `require` the 'widgets.css' file and all the images they end up loading.
+
+4.  Finally, you'll want to set the `BuildModuleUrl`'s base URL.  Before you require Cesium, place these statements:
+    var BuildModuleUrl = require('cesium/Source/Core/buildModuleUrl');
+    BuildModuleUrl.setBaseUrl('./');
 
 
 ##  Using the examples:
@@ -176,8 +239,6 @@ Each example can be run by following these steps:
 
 3.  Head on over to localhost:8080 to see Cesium running with webpack
 
-
-//TODO make sure you put scritps to build everything in the example github
 
 
 
