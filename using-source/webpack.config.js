@@ -4,7 +4,8 @@ module.exports = {
     entry: "./app.js",
     output: {
         path: __dirname + '/public',
-        filename: "bundle.js"
+        filename: "bundle.js",
+        sourcePrefix: ''
     },
     plugins: [
         new HtmlPlugin({
@@ -16,13 +17,13 @@ module.exports = {
         contentBase: './public',
     },
     module: {
+        unknownContextCritical: false,
         loaders: [
             { test: /\.css$/, loader: "style!css" },
             {
                 test: /\.(png|gif|jpg|jpeg)$/,
                 loader: 'file-loader'
-            },
-            { test: /Cesium\.js$/, loader: 'script' }
+            }
         ]
     }
 };

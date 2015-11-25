@@ -1,28 +1,3 @@
-using webpack with cesium js
-
-start off with a webpack config
-
-npm install or download (show how you can npm install without package.json)
-
-if pre-1.15, delete all package.json files in Source
-
-run ant build
-
-copy all the assets and stuff to your public directory
-
-
-require in your cesium assets.
-
-Or show how to require in a cesium.js bundle
-
-
-two ways of using webpack: requiring in just the source you need (recommended)
-
-or using cesium.js bundle
-
-
-npm install -g webpack
-
 # Cesium and Webpack
 
 This tutorial will show how you can use the [webpack](http://webpack.github.io/) module bundler with [Cesium](http://cesiumjs.org).  Some basic knowlege of Webpack will be assumed but code samples will be provided for reference.  These code samples are located [here](https://github.com/mmacaula/cesium-webpack).  There are two ways to use Cesium with webpack, the first is to use the pre-built bundle that is provided with every release, the other way is to `require` individual Cesium files and let Webpack make sure everything is properly included.  This tutorial will cover both paths to using Cesium in your application.
@@ -39,6 +14,10 @@ This feature is great for your application, but it can get a little tricky when 
 
 Luckily Webpack has a huge list of plugins and is very modular.  There are two basic ways of getting it to work with Cesium.  Using the pre-compiled version, and using the source files directly.
 
+If you are a webpack expert, or already have webpack up and running, just head on down to the bottom of this tutorial where I describe the steps without getting webpack setup.
+
+
+
 ## Using the pre-compiled version of Cesium
 
 This method essentially tells webpack to pull in the Cesium.js file like you would at the top of your `<html>` tag.
@@ -52,7 +31,7 @@ You'll need to install all the dependencies located in the package.json (link he
 
 ### Steps
 
-1.  Copy the built version of cesium to your project, in this example its in the 'lib' directory.
+1.  Copy the built version of Cesium to your project, in this example its in the 'lib' directory.
 
 2.   Next, copy over all the files from `lib/Cesium/*` to `./public`, creating the `public` directory if you haven't already done so.  Note:  `public` should NOT be checked into your source control.
 
@@ -140,6 +119,65 @@ If you are a webpack expert, you'll probably see a lot of steps in here that are
 Using the source directly can be your best bet when you really only want to pull in the parts of Cesium that you're using, and leave out the stuff you're not.  This can lead to faster loading times and keep your app more light-weight, always a good thing!  Unfortunately things can get slightly more tricky with this route with pre v1.15 Cesium, but we've got some steps mapped out and I'll identify which ones are optional if you're post 1.15
 
 
+
+
+## I've already got Webpack setup, just tell me how to use Cesium
+
+You still have the two choices.  Pre-built or using Source.  **In both cases you need to pre-build Cesium and copy over the assets to your output directory**.
+
+###  Pre-Built
+
+1.  Setup a script loader `{ test: /Cesium\.js$/, loader: 'script' }` and make sure you have a file loader setup as well.
+
+2.  Set the `CESIUM_BASE_URL` property.  `window.CESIUM_BASE_URL = './';` before you load or `require` Cesium.  `./` is assuming you just copy the assets directly to your output directory.  If you copy them to `output/Cesium` then change the path accordingly.
+
+###  Using the Source
+
+Pre-v1.15 you'll need a couple more steps, which you can integrate into your build process to automate:
+
+1.  (pre-v1.15 step).  Delete all package.json files in Cesium's `Source` directory. You can do this on *nix systems with this command:  `find path/to/Cesium/Source -name "package.json" -type f -delete`.  On Windows you should be able to run from the Source directory: `del /s package.json`.  Note this is untested and be careful as you type it.  To be safe, use `del /s /p package.json` which should ask for confirmation for each file.
+
+2.  Build Cesium's source.  Pre v1.15, you'll need to run `ant build`.  This generates all the .js files you'll need.  If you are using post v1.15 Cesium, you'll build using `gulp`.
+
+3.  Your webpack config will at a minimum need these options configured.  **Note, you'll need more, but these options are the minimum to get Cesium working from source**:
+```
+{
+    output: {
+        sourcePrefix: ''
+    },
+    module: {
+        unknownContextCritical: false,
+        loaders: [
+            { test: /\.css$/, loader: "style!css" },
+            {
+                test: /\.(png|gif|jpg|jpeg)$/,
+                loader: 'file-loader'
+            }
+        ]
+    }
+}
+```
+
+*  The `sourcePrefix`: '' is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://groups.google.com/forum/#!topic/cesium-dev/i7KAgG-IL5c).
+
+*  The `unknownContextCritical: false` is not strictly required, but Cesium (and the version of knockout included) uses dynamic module loading with require.js and this confuses webpack.  These warnings are safe to ignore and this flag ignores them.  Be careful though as this ignores all of those warnings.
+
+*  The loaders are probably already included in your webpack config but they are necessary to `require` the 'widgets.css' file and all the images they end up loading.
+
+
+##  Using the examples:
+You can see all of this in action [here](https://github.com/mmacaula/cesium-webpack) where there are two directories with sample projects setup.  The 'using-pre-built' has a working example with using pre-built Cesium and the 'using-source' directory has the same for using the source directly.
+
+Each example can be run by following these steps:
+
+1.  `cd` to the directory and run `npm install`
+
+2.  run `npm start` which will run any pre-processing tasks and then startup webpack-dev-server
+
+3.  Head on over to localhost:8080 to see Cesium running with webpack
+
+
+//TODO make sure you put scritps to build everything in the example github
 
 
 
