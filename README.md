@@ -217,7 +217,7 @@ Pre-v1.15 you'll need a couple more steps, which you can integrate into your bui
     }
     ```
 
-    *  The `sourcePrefix`: '' is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://groups.google.com/forum/#!topic/cesium-dev/i7KAgG-IL5c).
+    *  The `sourcePrefix`: '' is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://github.com/webpack/webpack/issues/1161).
 
     *  The `unknownContextCritical: false` is not strictly required, but Cesium (and the version of knockout included) uses dynamic module loading with require.js and this confuses webpack.  These warnings are safe to ignore and this flag ignores them.  Be careful though as this ignores all of those warnings.
 
