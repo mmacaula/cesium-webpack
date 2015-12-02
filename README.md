@@ -27,7 +27,7 @@ Install Node, Webpack and Webpack-Dev-Server.
 
     npm install -g webpack webpack-dev-server
 
-You'll need to install all the dependencies located in the package.json (link here) for the source code example.  `npm install`
+You'll need to install all the dependencies located in the package.json (https://github.com/Aviture/cesium-webpack/blob/master/using-pre-built/package.json) for the source code example.  `npm install`
 
 ### Steps
 
@@ -173,7 +173,7 @@ Using the source directly can be your best bet when you really only want to pull
     ```
     A lot of this is the same as before but with some differences:
 
-    *  In the `output` object we have `sourcePrefix: ''`.  This is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://groups.google.com/forum/#!topic/cesium-dev/i7KAgG-IL5c).
+    *  In the `output` object we have `sourcePrefix: ''`.  This is required because Cesium uses some multi-line strings in its code and [webpack indents them improperly](https://github.com/webpack/webpack/issues/1161).
 
     *  There's also the `unknownContextCritical : false` which tells webpack to ignore some warnings due to the way Cesium dynamically builds module paths.
 
@@ -233,7 +233,7 @@ You can see all of this in action [here](https://github.com/mmacaula/cesium-webp
 
 Each example can be run by following these steps:
 
-1.  `cd` to the directory and run `npm install`
+1.  `cd` to the directory and run `npm install`.  Once it is done, this runs the 'postinstall.sh' script which takes care of some of the steps I mentioned above automatically.  **Note:  best to run this in git bash in windows or translate yourself to windows commands**
 
 2.  run `npm start` which will run any pre-processing tasks and then startup webpack-dev-server
 
