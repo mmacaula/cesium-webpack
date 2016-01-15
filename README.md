@@ -116,13 +116,19 @@ If you are a webpack expert, you'll probably see a lot of steps in here that are
 
 ## Using the Source
 
-Using the source directly can be your best bet when you really only want to pull in the parts of Cesium that you're using, and leave out the stuff you're not.  This can lead to faster loading times and keep your app more light-weight, always a good thing!  Unfortunately things can get slightly more tricky with this route with pre v1.15 Cesium, but we've got some steps mapped out and I'll identify which ones are optional if you're post 1.15
+Using the source directly can be your best bet when you really only want to pull in the parts of Cesium that you're using, and leave out the stuff you're not.  This can lead to faster loading times and keep your app more light-weight, always a good thing!  Unfortunately things can get slightly more tricky with this route depending on what version of Cesium you're using, but don't worry, I'll identity what steps are necessary.
 
-1.  (pre-v1.15 step).  Delete all package.json files in Cesium's `Source` directory. You can do this on *nix systems with this command:  `find path/to/Cesium/Source -name "package.json" -type f -delete`.  On Windows you should be able to run from the Source directory: `del /s package.json`.  Note this is untested and be careful as you type it.  To be safe, use `del /s /p package.json` which should ask for confirmation for each file.
+1.  Getting Cesium ready for Webpack.  There are three options here that you may run into depending on the version of Cesium you're using:
 
-2.  Build Cesium's source.  Pre v1.15, you'll need to run `ant build`.  This generates all the .js files you'll need.  If you are using post v1.15 Cesium, you'll build using `gulp`.
+    **pre 1.15:**  Before v1.15, Cesium included a set of package.json files in its `Source` directory.  These really trip up webpack (and Browserify for that matter).  So, delete all package.json files in Cesium's `Source` directory. You can do this on *nix systems with this command:  `find path/to/Cesium/Source -name "package.json" -type f -delete`.  On Windows you should be able to run from the Source directory: `del /s package.json`.  Note this is untested and be careful as you type it.  To be safe, use `del /s /p package.json` which should ask for confirmation for each file.  
 
-3.  Create an app.js file and make it look like this:
+    Then you'll need to run the build:  which you can do by running `ant build`.  
+
+    **v1.15 :**  Run the Cesium build by running `gulp`
+
+    **v1.16 and later:**  As noted [here](https://cesiumjs.org/2015/12/14/Cesium-npm/), Cesium is now available on npm!  This makes the step as simple as `npm install cesium`
+
+2.  Create an app.js file and make it look like this:
     ```
     require('cesium/Source/Widgets/widgets.css');
     var BuildModuleUrl = require('cesium/Source/Core/ buildModuleUrl');
@@ -139,7 +145,7 @@ Using the source directly can be your best bet when you really only want to pull
 
     Finally we just use the viewer and instantiate it as before!
 
-4.  Next, let's look at our 'webpack.config.js' file.
+3.  Next, let's look at our 'webpack.config.js' file.
     ```
     var HtmlPlugin = require('html-webpack-plugin');
 
@@ -177,7 +183,7 @@ Using the source directly can be your best bet when you really only want to pull
 
     *  There's also the `unknownContextCritical : false` which tells webpack to ignore some warnings due to the way Cesium dynamically builds module paths.
 
-5.   With all that setup, you should be able to run `webpack-dev-server` on your console and navigate to localhost:8080 to and see your Cesium viewer up and running.
+4.   With all that setup, you should be able to run `webpack-dev-server` on your console and navigate to localhost:8080 to and see your Cesium viewer up and running.
 
 
 ## I've already got Webpack setup, just tell me how to use Cesium
@@ -192,13 +198,8 @@ You still have the two choices.  Pre-built or using Source.  **In both cases you
 
 ###  Using the Source
 
-Pre-v1.15 you'll need a couple more steps, which you can integrate into your build process to automate:
-
-1.  (pre-v1.15 step).  Delete all package.json files in Cesium's `Source` directory. You can do this on *nix systems with this command:  `find path/to/Cesium/Source -name "package.json" -type f -delete`.  On Windows you should be able to run from the Source directory: `del /s package.json`.  Note this is untested and be careful as you type it.  To be safe, use `del /s /p package.json` which should ask for confirmation for each file.
-
-2.  Build Cesium's source.  Pre v1.15, you'll need to run `ant build`.  This generates all the .js files you'll need.  If you are using post v1.15 Cesium, you'll build using `gulp`.
-
-3.  Your webpack config will at a minimum need these options configured.  **Note, you'll need more, but these options are the minimum to get Cesium working from source**:
+1.  You'll need to get Cesium ready for webpack.  [Check out step 1](#Using the Source) from above.  If you're using v1.16 or above, its just `npm install cesium`, but it's slightly more complicated with earlier versions.  
+2.  Your webpack config will at a minimum need these options configured.  **Note, you'll need more, but these options are the minimum to get Cesium working from source**:
     ```
     {
         output: {
@@ -238,8 +239,3 @@ Each example can be run by following these steps:
 2.  run `npm start` which will run any pre-processing tasks and then startup webpack-dev-server
 
 3.  Head on over to localhost:8080 to see Cesium running with webpack
-
-
-
-
-
