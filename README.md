@@ -128,7 +128,9 @@ Using the source directly can be your best bet when you really only want to pull
 
     **v1.16 and later:**  As noted [here](https://cesiumjs.org/2015/12/14/Cesium-npm/), Cesium is now available on npm!  This makes the step as simple as `npm install cesium`
 
-2.  Create an app.js file and make it look like this:
+2.  Next, copy over all the files from `Cesium/*` to `./public`, creating the `public` directory if you haven't already done so.  Note:  `public` should NOT be checked into your source control.
+
+3.  Create an app.js file and make it look like this:
     ```
     require('cesium/Source/Widgets/widgets.css');
     var BuildModuleUrl = require('cesium/Source/Core/ buildModuleUrl');
@@ -145,7 +147,7 @@ Using the source directly can be your best bet when you really only want to pull
 
     Finally we just use the viewer and instantiate it as before!
 
-3.  Next, let's look at our 'webpack.config.js' file.
+4.  Next, let's look at our 'webpack.config.js' file.
     ```
     var HtmlPlugin = require('html-webpack-plugin');
 
@@ -183,12 +185,12 @@ Using the source directly can be your best bet when you really only want to pull
 
     *  There's also the `unknownContextCritical : false` which tells webpack to ignore some warnings due to the way Cesium dynamically builds module paths.
 
-4.   With all that setup, you should be able to run `webpack-dev-server` on your console and navigate to localhost:8080 to and see your Cesium viewer up and running.
+5.   With all that setup, you should be able to run `webpack-dev-server` on your console and navigate to localhost:8080 to and see your Cesium viewer up and running.
 
 
 ## I've already got Webpack setup, just tell me how to use Cesium
 
-You still have the two choices.  Pre-built or using Source.  **In both cases you need to pre-build Cesium and copy over the assets to your output directory**.
+You still have the two choices.  Pre-built or using Source.  **In both cases you need to copy over the assets to your output directory**.
 
 ###  Pre-Built
 
@@ -198,7 +200,7 @@ You still have the two choices.  Pre-built or using Source.  **In both cases you
 
 ###  Using the Source
 
-1.  You'll need to get Cesium ready for webpack.  [Check out step 1](#Using the Source) from above.  If you're using v1.16 or above, its just `npm install cesium`, but it's slightly more complicated with earlier versions.  
+1.  You'll need to get Cesium ready for webpack.  [Check out step 1](#using-the-source) from above.  If you're using v1.16 or above, its just `npm install cesium`, but it's slightly more complicated with earlier versions.  
 2.  Your webpack config will at a minimum need these options configured.  **Note, you'll need more, but these options are the minimum to get Cesium working from source**:
     ```
     {
