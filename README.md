@@ -230,7 +230,7 @@ You still have the two choices.  Pre-built or using Source.  **In both cases you
 
 
 ##  Using the examples:
-You can see all of this in action [here](https://github.com/mmacaula/cesium-webpack) where there are two directories with sample projects setup.  The 'using-pre-built' has a working example with using pre-built Cesium and the 'using-source' directory has the same for using the source directly.
+You can see all of this in action [here](https://github.com/mmacaula/cesium-webpack) where there are two directories with sample projects setup.  The 'using-pre-built' has a working example with using pre-built Cesium and the 'using-source' directory has the same for using the source directly.  For the using source example, I used v1.14 of Cesium, which is the most complicated.  If you are using later versions, then getting Cesium ready is much easier.
 
 Each example can be run by following these steps:
 
