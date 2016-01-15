@@ -14,7 +14,7 @@ This feature is great for your application, but it can get a little tricky when 
 
 Luckily Webpack has a huge list of plugins and is very modular.  There are two basic ways of getting it to work with Cesium.  Using the pre-compiled version, and using the source files directly.
 
-If you are a webpack expert, or already have webpack up and running, just head on down to the bottom of this tutorial where I describe the steps without getting webpack setup.
+If you are a webpack expert, or already have webpack up and running, just head on [down](#ive-already-got-webpack-setup-just-tell-me-how-to-use-cesium) to the bottom of this tutorial where I describe the steps without getting webpack setup.
 
 
 
