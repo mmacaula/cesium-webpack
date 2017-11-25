@@ -1,3 +1,6 @@
+# Deprecated!
+While these instructions will work for webpack 1.x and older versions of Cesium, please see the updated documentation and examle at [https://cesiumjs.org/tutorials/cesium-and-webpack/](https://cesiumjs.org/tutorials/cesium-and-webpack/) and [https://github.com/AnalyticalGraphicsInc/cesium-webpack-example](https://github.com/AnalyticalGraphicsInc/cesium-webpack-example) respectively
+
 # Cesium and Webpack
 
 This tutorial will show how you can use the [webpack](http://webpack.github.io/) module bundler with [Cesium](http://cesiumjs.org).  Some basic knowlege of webpack will be assumed but code samples will be provided for reference.  These code samples are located [here](https://github.com/mmacaula/cesium-webpack).  There are two ways to use Cesium with webpack: the first is to use the pre-built bundle that is provided with every release; the other way is to `require` individual Cesium files and let webpack make sure everything is properly included.  This tutorial will cover both paths to using Cesium in your application.
